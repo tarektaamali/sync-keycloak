@@ -8,7 +8,7 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withInterceptors([authInterceptor()])),
     provideAuth({
       config: {
-        authority: 'http://localhost:8082/realms/app',
+        authority: 'http://app.localtest.me:8082/realms/app',
         redirectUrl: window.location.origin,
         postLogoutRedirectUri: window.location.origin,
         clientId: 'frontend',

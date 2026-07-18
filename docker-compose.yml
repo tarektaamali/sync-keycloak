@@ -1,3 +1,11 @@
+# NOTE: Browser cookies are scoped by hostname, NOT port. Three Keycloaks on
+# plain `localhost` share one cookie jar and clobber each other's admin-console
+# sessions (symptom: "Cookie not found", login loop). Access each console by a
+# distinct hostname instead (*.localtest.me all resolve to 127.0.0.1):
+#   ubs admin console : http://ubs.localtest.me:8080/admin/
+#   cs  admin console : http://cs.localtest.me:8081/admin/
+#   app admin console : http://app.localtest.me:8082/admin/
+# The Angular app logs in via http://app.localtest.me:8082/realms/app.
 services:
   postgres-ubs:
     image: postgres:16

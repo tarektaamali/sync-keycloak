@@ -5,7 +5,7 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://localhost:8082/realms/app
+          issuer-uri: http://app.localtest.me:8082/realms/app
 keycloak:
   ubs: { server-url: http://localhost:8080, realm: ubs }
   cs:  { server-url: http://localhost:8081, realm: cs }
