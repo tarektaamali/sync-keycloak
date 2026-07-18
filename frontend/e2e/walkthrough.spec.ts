@@ -19,7 +19,7 @@ test('happy-path walkthrough with screenshots', async ({ page }) => {
 
   // 2. Connections page (default route after auth)
   await expect(page.getByRole('heading', { name: 'Connections' })).toBeVisible();
-  await expect(page.getByText('UBS')).toBeVisible();
+  await expect(page.getByRole('cell', { name: 'UBS', exact: true })).toBeVisible();
   await page.screenshot({ path: shot('02-connections.png'), fullPage: true });
 
   // 3. Test a connection
