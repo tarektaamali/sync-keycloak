@@ -6,6 +6,19 @@ spring:
       resourceserver:
         jwt:
           issuer-uri: http://app.localtest.me:8082/realms/app
+  datasource:
+    url: jdbc:h2:file:./data/usersync;AUTO_SERVER=TRUE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: ""
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate.dialect: org.hibernate.dialect.H2Dialect
+vault:
+  uri: http://localhost:8200
+  token: root
 keycloak:
   ubs: { server-url: http://localhost:8080, realm: ubs }
   cs:  { server-url: http://localhost:8081, realm: cs }

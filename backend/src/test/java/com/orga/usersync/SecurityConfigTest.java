@@ -1,6 +1,9 @@
 package com.orga.usersync;
 
+import com.orga.usersync.audit.AuditService;
 import com.orga.usersync.config.SecurityConfig;
+import com.orga.usersync.connection.ConnectionService;
+import com.orga.usersync.connection.ConnectionTestService;
 import com.orga.usersync.keycloak.KeycloakSyncService;
 import com.orga.usersync.samba.SambaSyncService;
 import org.junit.jupiter.api.Test;
@@ -18,14 +21,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Import(SecurityConfig.class)
 class SecurityConfigTest {
     @Autowired MockMvc mvc;
+    @MockBean ConnectionService connectionService;
+    @MockBean ConnectionTestService connectionTestService;
     @MockBean KeycloakSyncService keycloakSyncService;
     @MockBean SambaSyncService sambaSyncService;
+    @MockBean AuditService auditService;
 
     @Test void anonymous_api_is_unauthorized() throws Exception {
-        mvc.perform(get("/api/keycloak/users")).andExpect(status().isUnauthorized());
+        mvc.perform(get("/api/connections")).andExpect(status().isUnauthorized());
     }
 
     @Test void jwt_api_is_authorized() throws Exception {
-        mvc.perform(get("/api/keycloak/users").with(jwt())).andExpect(status().isOk());
+        mvc.perform(get("/api/connections").with(jwt())).andExpect(status().isOk());
     }
 }

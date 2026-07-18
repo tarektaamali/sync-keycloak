@@ -2,9 +2,26 @@
   "realm": "ubs",
   "enabled": true,
   "roles": { "realm": [{ "name": "teller" }, { "name": "manager" }, { "name": "auditor" }] },
+  "clients": [
+    {
+      "clientId": "user-sync-agent",
+      "enabled": true,
+      "publicClient": false,
+      "secret": "agent-secret",
+      "serviceAccountsEnabled": true,
+      "standardFlowEnabled": false,
+      "directAccessGrantsEnabled": false
+    }
+  ],
   "users": [
     { "username": "alice", "enabled": true, "email": "alice@ubs.local", "firstName": "Alice", "lastName": "Meyer", "realmRoles": ["teller"] },
     { "username": "bruno", "enabled": true, "email": "bruno@ubs.local", "firstName": "Bruno", "lastName": "Keller", "realmRoles": ["manager"] },
-    { "username": "carla", "enabled": true, "email": "carla@ubs.local", "firstName": "Carla", "lastName": "Rossi", "realmRoles": ["auditor", "teller"] }
+    { "username": "carla", "enabled": true, "email": "carla@ubs.local", "firstName": "Carla", "lastName": "Rossi", "realmRoles": ["auditor", "teller"] },
+    {
+      "username": "service-account-user-sync-agent",
+      "enabled": true,
+      "serviceAccountClientId": "user-sync-agent",
+      "clientRoles": { "realm-management": ["view-users", "manage-users", "view-realm", "manage-realm"] }
+    }
   ]
 }
