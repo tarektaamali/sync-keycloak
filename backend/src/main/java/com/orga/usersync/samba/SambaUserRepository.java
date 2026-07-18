@@ -1,7 +1,7 @@
 package com.orga.usersync.samba;
 
+import com.orga.usersync.connection.Connection;
 import com.orga.usersync.model.UserDto;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.ldap.core.AttributesMapper;
 import org.springframework.ldap.core.LdapTemplate;
 import org.springframework.ldap.core.support.LdapContextSource;
@@ -12,27 +12,14 @@ import java.util.List;
 
 @Repository
 public class SambaUserRepository {
-
     public static final AttributesMapper<UserDto> USER_MAPPER = SambaUserRepository::map;
 
-    private final LdapTemplate ldap;
-    private final String userSearchBase;
-
-    public SambaUserRepository(
-            @Value("${samba.url}") String url,
-            @Value("${samba.base}") String base,
-            @Value("${samba.username}") String user,
-            @Value("${samba.password}") String pass,
-            @Value("${samba.user-search-base}") String userSearchBase) {
+    public List<UserDto> findAll(Connection c, String bindPassword) {
         LdapContextSource cs = new LdapContextSource();
-        cs.setUrl(url); cs.setBase(base); cs.setUserDn(user); cs.setPassword(pass);
+        cs.setUrl(c.getServerUrl()); cs.setBase(c.getBaseDn());
+        cs.setUserDn(c.getBindDn()); cs.setPassword(bindPassword);
         cs.afterPropertiesSet();
-        this.ldap = new LdapTemplate(cs);
-        this.userSearchBase = userSearchBase;
-    }
-
-    public List<UserDto> findAll() {
-        return ldap.search(userSearchBase, "(objectClass=user)", USER_MAPPER);
+        return new LdapTemplate(cs).search(c.getUserSearchBase(), "(objectClass=user)", USER_MAPPER);
     }
 
     static UserDto map(Attributes a) throws javax.naming.NamingException {
@@ -44,7 +31,6 @@ public class SambaUserRepository {
         boolean enabled = uac == null || (Integer.parseInt(uac) & 0x2) == 0;
         return new UserDto(username, email, first, last, enabled, List.of());
     }
-
     private static String str(Attributes a, String id) throws javax.naming.NamingException {
         return a.get(id) == null ? null : String.valueOf(a.get(id).get());
     }
