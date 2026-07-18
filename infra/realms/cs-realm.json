@@ -2,5 +2,23 @@
   "realm": "cs",
   "enabled": true,
   "roles": { "realm": [{ "name": "teller" }, { "name": "manager" }] },
-  "users": []
+  "clients": [
+    {
+      "clientId": "user-sync-agent",
+      "enabled": true,
+      "publicClient": false,
+      "secret": "agent-secret",
+      "serviceAccountsEnabled": true,
+      "standardFlowEnabled": false,
+      "directAccessGrantsEnabled": false
+    }
+  ],
+  "users": [
+    {
+      "username": "service-account-user-sync-agent",
+      "enabled": true,
+      "serviceAccountClientId": "user-sync-agent",
+      "clientRoles": { "realm-management": ["view-users", "manage-users", "view-realm", "manage-realm"] }
+    }
+  ]
 }

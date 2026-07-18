@@ -83,3 +83,12 @@ services:
     build: ./frontend
     ports: ["4200:80"]
     depends_on: [backend]
+
+  vault:
+    image: hashicorp/vault:1.15
+    cap_add: ["IPC_LOCK"]
+    environment:
+      VAULT_DEV_ROOT_TOKEN_ID: root
+      VAULT_DEV_LISTEN_ADDRESS: 0.0.0.0:8200
+    command: ["server", "-dev"]
+    ports: ["8200:8200"]
