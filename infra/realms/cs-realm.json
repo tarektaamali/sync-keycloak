@@ -1,0 +1,6 @@
+{
+  "realm": "cs",
+  "enabled": true,
+  "roles": { "realm": [{ "name": "teller" }, { "name": "manager" }] },
+  "users": []
+}
