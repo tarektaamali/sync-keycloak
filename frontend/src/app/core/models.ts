@@ -22,3 +22,13 @@ export interface SyncRun {
   mode: string; includeRoles: boolean; created: number; updated: number; deleted: number;
   skipped: number; errorCount: number; status: string;
 }
+
+export type ScheduleType = 'KEYCLOAK' | 'SAMBA';
+export interface ScheduledJob {
+  id: number; name: string; type: ScheduleType; sourceConnId: number; targetConnId: number;
+  mode: SyncMode; includeRoles: boolean; cron: string; enabled: boolean;
+}
+export interface ScheduleRequest {
+  name: string; type: ScheduleType; sourceConnId: number; targetConnId: number;
+  mode: SyncMode; includeRoles: boolean; cron: string; enabled: boolean;
+}
