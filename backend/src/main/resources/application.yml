@@ -1,0 +1,18 @@
+server:
+  port: 9090
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8082/realms/app
+keycloak:
+  ubs: { server-url: http://localhost:8080, realm: ubs }
+  cs:  { server-url: http://localhost:8081, realm: cs }
+  admin: { username: admin, password: admin }
+samba:
+  url: ldap://localhost:389
+  base: DC=ORGA,DC=LOCAL
+  username: CN=Administrator,CN=Users,DC=ORGA,DC=LOCAL
+  password: "Passw0rd!2024"
+  user-search-base: CN=Users
