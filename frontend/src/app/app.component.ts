@@ -15,6 +15,7 @@ import { OidcSecurityService } from 'angular-auth-oidc-client';
           <a class="nav-link text-white-50 mb-1" routerLink="/connections" routerLinkActive="text-white fw-bold">🔌 Connections</a>
           <a class="nav-link text-white-50 mb-1" routerLink="/sync/keycloak" routerLinkActive="text-white fw-bold">↔ Keycloak → KC</a>
           <a class="nav-link text-white-50 mb-1" routerLink="/sync/samba" routerLinkActive="text-white fw-bold">↔ Samba → KC</a>
+          <a class="nav-link text-white-50 mb-1" routerLink="/schedules" routerLinkActive="text-white fw-bold">⏰ Schedules</a>
           <a class="nav-link text-white-50 mb-1" routerLink="/history" routerLinkActive="text-white fw-bold">📘 History</a>
           <div class="mt-auto small">
             <div class="text-white-50 mb-1">{{ username }}</div>

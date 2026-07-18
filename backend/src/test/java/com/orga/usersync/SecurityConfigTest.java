@@ -6,6 +6,7 @@ import com.orga.usersync.connection.ConnectionService;
 import com.orga.usersync.connection.ConnectionTestService;
 import com.orga.usersync.keycloak.KeycloakSyncService;
 import com.orga.usersync.samba.SambaSyncService;
+import com.orga.usersync.schedule.ScheduleService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -26,6 +27,7 @@ class SecurityConfigTest {
     @MockBean KeycloakSyncService keycloakSyncService;
     @MockBean SambaSyncService sambaSyncService;
     @MockBean AuditService auditService;
+    @MockBean ScheduleService scheduleService;
 
     @Test void anonymous_api_is_unauthorized() throws Exception {
         mvc.perform(get("/api/connections")).andExpect(status().isUnauthorized());
