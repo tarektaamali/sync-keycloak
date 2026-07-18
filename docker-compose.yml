@@ -59,3 +59,19 @@ services:
       HOSTIP: 127.0.0.1
     ports: ["389:389", "636:636"]
     privileged: true
+
+  backend:
+    build: ./backend
+    ports: ["9090:9090"]
+    environment:
+      # Container-to-container URLs (host uses localhost:8080/8081/8082).
+      KEYCLOAK_UBS_SERVER-URL: http://keycloak-ubs:8080
+      KEYCLOAK_CS_SERVER-URL: http://keycloak-cs:8081
+      SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER-URI: http://keycloak-app:8080/realms/app
+      SAMBA_URL: ldap://samba-ad:389
+    depends_on: [keycloak-ubs, keycloak-cs, keycloak-app]
+
+  frontend:
+    build: ./frontend
+    ports: ["4200:80"]
+    depends_on: [backend]
