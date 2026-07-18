@@ -20,6 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class ConnectionControllerTest {
     @Autowired MockMvc mvc;
     @MockBean ConnectionService svc;
+    @MockBean ConnectionTestService tester;
 
     @Test void list_requires_auth() throws Exception {
         mvc.perform(get("/api/connections")).andExpect(status().isUnauthorized());

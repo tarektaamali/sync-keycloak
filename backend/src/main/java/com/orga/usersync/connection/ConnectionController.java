@@ -9,8 +9,11 @@ import java.util.List;
 @RequestMapping("/api/connections")
 public class ConnectionController {
     private final ConnectionService svc;
+    private final ConnectionTestService tester;
 
-    public ConnectionController(ConnectionService svc) { this.svc = svc; }
+    public ConnectionController(ConnectionService svc, ConnectionTestService tester) {
+        this.svc = svc; this.tester = tester;
+    }
 
     @GetMapping public List<ConnectionView> list() { return svc.list(); }
 
@@ -23,4 +26,7 @@ public class ConnectionController {
     @DeleteMapping("/{id}") public ResponseEntity<Void> delete(@PathVariable Long id) {
         svc.delete(id); return ResponseEntity.noContent().build();
     }
+
+    @PostMapping("/{id}/test")
+    public ConnectionTestService.TestResult test(@PathVariable Long id) { return tester.test(id); }
 }
