@@ -14,7 +14,7 @@ import { SyncRun } from '../core/models';
           <td class="small">{{ r.timestamp }}</td><td class="small">{{ r.actor }}</td>
           <td class="small">{{ r.sourceConn }} → {{ r.targetConn }}</td>
           <td class="small">{{ r.mode }}<span *ngIf="r.includeRoles"> +roles</span></td>
-          <td class="small">+{{r.created}} ~{{r.updated}} -{{r.deleted}} ={{r.skipped}}
+          <td class="small">+{{r.created}} ~{{r.updated}} ⊘{{r.disabled}} -{{r.deleted}} ={{r.skipped}}
             <span *ngIf="r.errorCount" class="text-danger">({{r.errorCount}} err)</span></td>
           <td><span class="badge" [ngClass]="r.status === 'OK' ? 'bg-success' : 'bg-warning text-dark'">{{r.status}}</span></td>
         </tr>
