@@ -19,6 +19,7 @@ public class AuditService {
         run.setMode(mode.name()); run.setIncludeRoles(includeRoles);
         run.setCreated(r.created()); run.setUpdated(r.updated());
         run.setDeleted(r.deleted()); run.setSkipped(r.skipped());
+        run.setDisabled(r.disabled());
         run.setErrorCount(r.errors().size());
         run.setStatus(r.errors().isEmpty() ? "OK" : "PARTIAL");
         sink.save(run);

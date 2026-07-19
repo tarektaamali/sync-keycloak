@@ -86,7 +86,7 @@ public class SambaSyncService {
                 }
             } catch (RuntimeException e) { errors.add(a.username() + ": " + e.getMessage()); }
         }
-        return new SyncResult(created, updated, skipped, deleted, errors);
+        return new SyncResult(created, updated, skipped, deleted, 0, errors);
     }
 
     private Set<String> usernames(RealmResource realm) {

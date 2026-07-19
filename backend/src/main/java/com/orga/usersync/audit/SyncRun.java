@@ -13,7 +13,7 @@ public class SyncRun {
     private String targetConn;
     private String mode;
     private boolean includeRoles;
-    private int created; private int updated; private int deleted; private int skipped; private int errorCount;
+    private int created; private int updated; private int deleted; private int skipped; private int disabled; private int errorCount;
     private String status;
 
     public Long getId() { return id; }
@@ -27,6 +27,7 @@ public class SyncRun {
     public int getUpdated() { return updated; } public void setUpdated(int v) { this.updated = v; }
     public int getDeleted() { return deleted; } public void setDeleted(int v) { this.deleted = v; }
     public int getSkipped() { return skipped; } public void setSkipped(int v) { this.skipped = v; }
+    public int getDisabled() { return disabled; } public void setDisabled(int v) { this.disabled = v; }
     public int getErrorCount() { return errorCount; } public void setErrorCount(int v) { this.errorCount = v; }
     public String getStatus() { return status; } public void setStatus(String v) { this.status = v; }
 }

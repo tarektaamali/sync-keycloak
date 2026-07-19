@@ -26,7 +26,7 @@ class KeycloakControllerTest {
 
     @Test void sync_returns_summary() throws Exception {
         when(svc.sync(anyLong(), anyLong(), any(), anyBoolean(), any()))
-            .thenReturn(new SyncResult(2, 1, 0, 0, List.of()));
+            .thenReturn(new SyncResult(2, 1, 0, 0, 0, List.of()));
         mvc.perform(post("/api/keycloak/sync").with(jwt()).contentType("application/json")
                 .content("{\"sourceConnId\":1,\"targetConnId\":2,\"mode\":\"CREATE_UPDATE\",\"includeRoles\":true}"))
             .andExpect(status().isOk())

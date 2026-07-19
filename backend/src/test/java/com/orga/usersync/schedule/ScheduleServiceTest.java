@@ -28,7 +28,7 @@ class ScheduleServiceTest {
             @Override public SyncResult run(ScheduledJob j) {
                 calls.incrementAndGet();
                 synchronized (gate) { while (!release[0]) { try { gate.wait(50); } catch (InterruptedException e) { break; } } }
-                return new SyncResult(0,0,0,0,List.of());
+                return new SyncResult(0,0,0,0,0,List.of());
             }
         };
         ScheduleService svc = new ScheduleService(mock(ScheduledJobSink.class), dispatcher, mock(TaskScheduler.class));
