@@ -25,7 +25,7 @@ class ScheduleControllerTest {
     @MockBean ScheduleService svc;
 
     @Test void run_now_returns_result() throws Exception {
-        when(svc.runNow(anyLong())).thenReturn(new SyncResult(1, 0, 0, 0, List.of()));
+        when(svc.runNow(anyLong())).thenReturn(new SyncResult(1, 0, 0, 0, 0, List.of()));
         mvc.perform(post("/api/schedules/5/run").with(jwt()))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.created").value(1));

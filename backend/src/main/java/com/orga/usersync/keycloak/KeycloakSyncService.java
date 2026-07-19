@@ -81,7 +81,7 @@ public class KeycloakSyncService {
                 }
             } catch (RuntimeException e) { errors.add(a.username() + ": " + e.getMessage()); }
         }
-        return new SyncResult(created, updated, skipped, deleted, errors);
+        return new SyncResult(created, updated, skipped, deleted, 0, errors);
     }
 
     private List<UserDto> readAll(RealmResource realm) {

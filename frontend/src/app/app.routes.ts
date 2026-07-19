@@ -4,6 +4,7 @@ import { KeycloakSyncComponent } from './sync/keycloak-sync.component';
 import { SambaSyncComponent } from './sync/samba-sync.component';
 import { HistoryComponent } from './history/history.component';
 import { SchedulesComponent } from './schedules/schedules.component';
+import { WatchesComponent } from './watches/watches.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'connections', pathMatch: 'full' },
@@ -11,5 +12,6 @@ export const routes: Routes = [
   { path: 'sync/keycloak', component: KeycloakSyncComponent },
   { path: 'sync/samba', component: SambaSyncComponent },
   { path: 'schedules', component: SchedulesComponent },
+  { path: 'watches', component: WatchesComponent },
   { path: 'history', component: HistoryComponent },
 ];

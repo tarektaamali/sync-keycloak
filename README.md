@@ -33,8 +33,34 @@ Connections are **saved profiles** (UBS/CS/Samba ship pre-seeded; add any). Secr
 - **Configurable sync modes** — `create-only`, `create + update`, `mirror` (deletes extras); optional **include roles** (auto-creates missing roles).
 - **Dry-run preview** — see exactly which users would be created / updated / deleted before running.
 - **Scheduled syncs** — recurring cron jobs (Spring 6-field, e.g. `0 0 2 * * ?` = daily 02:00), managed in the UI, with **Run now**; each run is audited.
-- **Audit log** — every run recorded (actor, source→target, mode, counts, status).
+- **User watches (scoped reconciliation)** — watch a chosen set of users (hand-picked list *or* filter) and keep exactly them reconciled on a target Keycloak on a cron. Disable always propagates; removal follows a per-watch policy (`disable` / `delete` / `ignore`); each watch runs `report-only` (dry-run) or `enforce`. Scoped by design — a watch never touches users outside its governed set — with a persisted member snapshot and full audit trail.
+- **Audit log** — every run recorded (actor, source→target, mode, counts incl. disabled, status).
 - **Banking-grade secrets** — stored in HashiCorp Vault; the app DB holds only a `secretRef`. No end-user passwords stored (OIDC login).
+
+---
+
+## User watches (scoped reconciliation)
+
+Beyond whole-realm sync, a **watch** governs *only* a chosen set of users — a safer, auditable shape for production directories. Safe defaults: **report-only** and **disable (not delete)** on removal.
+
+| | |
+|---|---|
+| **Watches** list | **New watch** — pick specific users |
+| ![Watches](docs/screenshots/watch-01-list.png) | ![Editor – list](docs/screenshots/watch-02-editor-list.png) |
+| **Filter + on-removal policy + run mode** | **Members** — governed-identity snapshot |
+| ![Editor – filter](docs/screenshots/watch-03-editor-filter.png) | ![Members](docs/screenshots/watch-04-members.png) |
+
+**History** — the immutable audit trail: report-only (`REPORT`) vs enforce (`OK`), with the disable (`⊘`) counts.
+
+![History](docs/screenshots/watch-05-history.png)
+
+- **Select** users explicitly (checkboxes from the source) or by a **filter** term.
+- **On source removal**: `DISABLE` (default) · `DELETE` · `IGNORE`, per watch.
+- **Run mode**: `REPORT_ONLY` (dry-run — records what *would* change) or `ENFORCE`.
+- **Disable always propagates** (source-disabled → target disabled).
+
+Run the walkthrough that generated these screenshots (needs the full stack up):
+`cd frontend && npx playwright test watches-walkthrough`
 
 ---
 
