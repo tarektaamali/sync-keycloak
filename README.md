@@ -84,6 +84,67 @@ Secret-handling rationale + standards mapping: [`docs/security-audit.md`](docs/s
 
 ---
 
+## How connections authenticate (service accounts & secrets)
+
+Every directory the tool talks to is a **saved connection profile**. A profile pairs an *identity* with a *secret* — but the secret is never kept inside the app. The app database stores only a **pointer** to it; the real value lives in **Vault** and is fetched at the moment it's needed. There are two kinds of connection, each with its own credential style.
+
+### Keycloak connections (e.g. UBS, CS)
+
+The tool authenticates as a **confidential service-account client** — a *machine* identity, never a person — using the OAuth2 **client-credentials** grant. No human logs in, and no end-user password exists anywhere in the flow.
+
+Two distinct things combine, and it helps to keep them separate:
+
+| Question | Answered by | How |
+|---|---|---|
+| **"Who is calling?"** | the **client** (`user-sync-agent`) | proves itself with a **client secret** |
+| **"What may it do?"** | the client's **service account** | carries least-privilege `realm-management` roles (view / query / manage users) |
+
+Authenticating only gets the caller *in*; it grants no access on its own. What the agent is allowed to read or change comes entirely from the roles on its service account. The client is deliberately locked down — confidential (secret-based), **service-accounts only**, with browser login and username/password grants switched off — so it can be used *only* for machine-to-machine calls, never to impersonate a user.
+
+### LDAP / Samba connections
+
+Same secret-handling logic, a different credential: the tool binds to the directory with a **bind DN** and a **bind password** (also stored in Vault). No OAuth is involved.
+
+### Where the secret lives — and where it doesn't
+
+| Layer | What it holds |
+|---|---|
+| **App DB (H2)** | only a *reference*, e.g. `vault://usersync/UBS#client-secret` — never the secret value |
+| **Vault** | the actual value, at path `secret/usersync/UBS` under the key `client-secret` |
+| **Backend (memory)** | the value only *transiently* — resolved per call to build the token request, never persisted |
+
+So a leak of the app database exposes no credentials — only the names of the Vault entries to look up (which are themselves useless without Vault access).
+
+### The flow, end to end
+
+```mermaid
+sequenceDiagram
+  participant BE as Backend
+  participant DB as App DB (H2)
+  participant V as Vault
+  participant KC as Keycloak (UBS)
+
+  BE->>DB: read the UBS connection profile
+  DB-->>BE: clientId + secretRef (a pointer, not the secret)
+  BE->>V: resolve secretRef → usersync/UBS # client-secret
+  V-->>BE: the client secret
+  BE->>KC: client-credentials token request (clientId + secret)
+  KC-->>BE: short-lived access token, scoped by the service account's roles
+  BE->>KC: admin call — list / create / disable / delete user
+  KC-->>BE: result (permitted only if the roles allow it)
+```
+
+### Why it's shaped this way (audit rationale)
+
+- **No end-user passwords** are ever stored, transmitted, or required — people sign in to the console via OIDC; the tool acts on directories as a machine.
+- **Least privilege:** a dedicated client per environment with only the user-management roles it needs — no realm-admin, no master admin.
+- **Separation of duties:** *identity* (the secret) and *authorisation* (the roles) are independent; rotating the secret doesn't change permissions, and tightening permissions doesn't touch the secret.
+- **Secrets stay in Vault:** the app holds a reference only, and access tokens are short-lived, so nothing long-lived and sensitive sits in the app tier.
+
+> The dev stack uses a weak, well-known secret (`agent-secret`, baked into the realm import for convenience). In a real deployment this is a strong, rotated secret that is never committed anywhere. See [`docs/security-audit.md`](docs/security-audit.md) for the full standards mapping.
+
+---
+
 ## Quick start
 
 **Prerequisites:** Docker + Compose, Java 21, Node 20.
